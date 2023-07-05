@@ -3,7 +3,7 @@ package msPro.mgf4boomi
 import com.boomi.document.scripting.DataContext
 import groovy.transform.TypeChecked
 
-/** Provides functionality to easily access a DataContext during testing.
+/** Provides functionality to easily access an Output DataContext during testing.
  */
 @TypeChecked
 class DataContextHelper {
@@ -24,7 +24,7 @@ class DataContextHelper {
     }
 
     Properties getOutDocumentProperties(int docNo) {
-        Properties originalProperties = _dataContext._outputDocuments[docNo]._docProps
+        Properties originalProperties = _dataContext._outputDocuments[docNo].DocumentProperties
         // remove the trailing Boomi user defined property name
         int firstIndex = Document.userDefinedPropertyBase.length()
         Properties results = new Properties()
