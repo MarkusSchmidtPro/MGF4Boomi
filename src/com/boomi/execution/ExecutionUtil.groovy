@@ -3,6 +3,7 @@ package com.boomi.execution
 import groovy.transform.TypeChecked
 import msPro.mgf4boomi.ExecutionContexts
 
+import java.util.logging.ConsoleHandler
 import java.util.logging.Logger
 
 /** Represents the ExecutionUtil mock object as it exists on the Boomi-Platform.
@@ -12,7 +13,8 @@ import java.util.logging.Logger
 @TypeChecked
 class ExecutionUtil {
 
-    private final static Logger _logger = Logger.getLogger("ExecutionUtil")
+    //private final static Logger _logger = Logger.getLogger("ExecutionUtil")
+    private final static Logger _logger = Logger.getLogger(ExecutionUtil.class.name);
 
     private static ExecutionContexts _executionContext 
 
@@ -21,6 +23,14 @@ class ExecutionUtil {
      */
     static fw_initialize(ExecutionContexts executionContexts ) {
         _executionContext = executionContexts != null ? executionContexts : ExecutionContexts.default()
+        _logger.setUseParentHandlers(false);
+        
+        def ch = new ConsoleHandler();
+        ch.setFormatter( {            return "${it.level} ${it.message}\r\n".toString()        } );
+        _logger.addHandler(ch);
+        /*_logger.setFilter {
+            it.loggerName ==ExecutionUtil.class.name 
+        }*/
     }         
 
 
