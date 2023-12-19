@@ -1,7 +1,7 @@
 package com.boomi.execution
 
 import groovy.transform.TypeChecked
-import msPro.mgf4boomi.ExecutionUtilContexts
+import msPro.mgf4boomi.ExecutionContexts
 import sun.reflect.generics.reflectiveObjects.NotImplementedException
 
 /** Represent the ExecutionManager object as it exists on the Boomi-Platform.
@@ -10,11 +10,11 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException
 @TypeChecked
 class ExecutionManager {
 
-    static initialize(ExecutionUtilContexts processExecutionContext) {
+    static initialize(ExecutionContexts processExecutionContext) {
         _processExecutionContext = processExecutionContext
     }
 
-    private static ExecutionUtilContexts _processExecutionContext = null
+    private static ExecutionContexts _processExecutionContext = null
 
 
     static ExecutionManager getCurrent() { throw new NotImplementedException() }

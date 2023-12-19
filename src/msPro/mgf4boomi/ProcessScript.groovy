@@ -6,21 +6,27 @@ import groovy.transform.TypeChecked
 import org.codehaus.groovy.control.CompilerConfiguration
 
 @TypeChecked
-class ProcessScript{
+class ProcessScript {
     static final String SCRIPT_BASE_DIR = "../MyScript/src/processScript/"
     private final File _scriptFile
 
-    ProcessScript(String fileName, String baseDir = SCRIPT_BASE_DIR){
+    ProcessScript(String fileName, String baseDir = SCRIPT_BASE_DIR) {
         _scriptFile = new File(baseDir + fileName)
         if (!_scriptFile.exists()) throw new FileNotFoundException("File '${_scriptFile.getCanonicalPath()}' not found.")
     }
 
-    DataContextHelper run(ExecutionUtilContexts processExecutionContext, DataContext dataContext)
-    {
-        assert processExecutionContext != null
+
+    /** Run a Boomi Process Script using the provided contexts.
+     * 
+     * The process script filename was provided in the constructor.
+     * 
+     * @param dataContext Provide DataContext.create( <documents> )
+     * @param executionContexts
+     * @return
+     */
+    DataContext run(DataContext dataContext, ExecutionContexts executionContexts = null) {
         assert dataContext != null
-        assert dataContext.dataCount > 0, "Cannot run script on DataContext without documents"
-        ExecutionUtil.initialize(processExecutionContext)
+        ExecutionUtil.fw_initialize( executionContexts)
 
         // All values which are set on the Binding are directly available to the script.
         // binding.dataContext = dataContext;
@@ -41,9 +47,6 @@ class ProcessScript{
         binding.setVariable('dataContext', dataContext)
         script.setBinding(binding)
         script.run()
-
-        // Do some process script POST execution checks
-        assert dataContext.dataCount != 0, 'Process script should return one or more documents!'
-        return new DataContextHelper(dataContext)
+        return dataContext
     }
 }

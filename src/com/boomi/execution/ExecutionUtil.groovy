@@ -1,7 +1,7 @@
 package com.boomi.execution
 
 import groovy.transform.TypeChecked
-import msPro.mgf4boomi.ExecutionUtilContexts
+import msPro.mgf4boomi.ExecutionContexts
 
 import java.util.logging.Logger
 
@@ -14,14 +14,14 @@ class ExecutionUtil {
 
     private final static Logger _logger = Logger.getLogger("ExecutionUtil")
 
-    static initialize(ExecutionUtilContexts processExecutionContext) {
-        _processExecutionContext = processExecutionContext
-    }
+    private static ExecutionContexts _executionContext 
 
-    /**Planned: Load a JSON serialized ExecutionContext from file. */
-    static fromFile( String filename) { assert false, "FromFile not yet implemented!" }
-
-    private static ExecutionUtilContexts _processExecutionContext = null
+    /** Framework function to initialize the ExecutionUtil.
+      * @param executionContexts
+     */
+    static fw_initialize(ExecutionContexts executionContexts ) {
+        _executionContext = executionContexts != null ? executionContexts : ExecutionContexts.default()
+    }         
 
 
     /**
@@ -35,31 +35,30 @@ class ExecutionUtil {
     static Logger getBaseLogger() { return _logger }
 
     static getRuntimeExecutionProperty(String key){
-        assert _processExecutionContext != null, "ExecutionUtil not initialized!"
-        _processExecutionContext.executionProperties.get( key)
+        assert _executionContext != null, "ExecutionUtil not initialized!"
+        _executionContext.executionProperties.get( key)
     }
 
     /** Get a dynamic process property from the execution context
      */
     static void setDynamicProcessProperty(String propertyName, String value, Boolean persist) {
-        assert _processExecutionContext != null, "ExecutionUtil not initialized!"
-        _processExecutionContext.dynamicProcessProperties.put(propertyName, value)
+        assert _executionContext != null, "ExecutionUtil not initialized!"
+        _executionContext.dynamicProcessProperties.put(propertyName, value)
     }
 
     static String getDynamicProcessProperty(String propertyName) {
-        assert _processExecutionContext != null, "ExecutionUtil not initialized!"
-        return _processExecutionContext.dynamicProcessProperties.get(propertyName)
+        assert _executionContext != null, "ExecutionUtil not initialized!"
+        return _executionContext.dynamicProcessProperties.get(propertyName)
     }
 
-
     static String getProcessProperty(String componentId, String propertyKey) {
-        assert _processExecutionContext != null, "ExecutionUtil not initialized!"
-        return _processExecutionContext.processProperties.get(componentId + propertyKey)
+        assert _executionContext != null, "ExecutionUtil not initialized!"
+        return _executionContext.processProperties.get(componentId + propertyKey)
     }
 
     static void setProcessProperty(String componentId, String propertyKey, String value) {
-        assert _processExecutionContext != null, "ExecutionUtil not initialized!"
-        _processExecutionContext.processProperties.put(componentId + propertyKey, value)
+        assert _executionContext != null, "ExecutionUtil not initialized!"
+        _executionContext.processProperties.put(componentId + propertyKey, value)
     }
 }
 

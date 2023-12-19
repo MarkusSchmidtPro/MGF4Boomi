@@ -15,7 +15,7 @@ import groovy.transform.TypeChecked
  * During the development process using the IDE there are no Boomi-Platform contexts.
  * The <i>ScriptRunner</i> allows the execution of a script while providing
  * the necessary contexts.<br/>
- * <b>Please notice:</b> The {@link DataContext}, the {@link ExecutionUtilContexts},
+ * <b>Please notice:</b> The {@link DataContext}, the {@link ExecutionContexts},
  * as well as the Input parameters must be provided by execution host.
  */
 @TypeChecked
@@ -40,13 +40,13 @@ class MapScript {
         if (!_scriptFile.exists()) throw new FileNotFoundException("File '${_scriptFile.getCanonicalPath()}' not found.")
     }
 
-    Map<String, Object> run(ExecutionUtilContexts processExecutionContext, Map inputs) {
+    Map<String, Object> run(ExecutionContexts processExecutionContext, Map inputs) {
         return run(processExecutionContext, new Binding(inputs))
     }
 
-    Map<String, Object> run(ExecutionUtilContexts processExecutionContext, Binding binding) {
+    Map<String, Object> run(ExecutionContexts processExecutionContext, Binding binding) {
         assert (processExecutionContext != null)
-        ExecutionUtil.initialize(processExecutionContext)
+        ExecutionUtil.fw_initialize(processExecutionContext)
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(_scriptFile)
         return binding.variables

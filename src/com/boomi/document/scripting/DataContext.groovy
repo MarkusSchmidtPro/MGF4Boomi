@@ -4,24 +4,29 @@ import msPro.mgf4boomi.Document
 import groovy.transform.TypeChecked
 
 /**
- * Represent a Boomi-Platform Scripting context.
- *  <br/>
+ * Represent a Boomi data context which is actually 
+ *  a list of documents together with their 
+ *  dynamic document properties..
+ *
  * @see
  *  <a href="https://help.boomi.com/bundle/integration/page/c-atm-Scripting_context.html">Boomi-Platform Scripting-Context</a>
  */
 @TypeChecked
 class DataContext {
-    /** The incoming and outgoing documents. */
-    private List<Document> _inputDocuments = null
-    List<Document> _outputDocuments = null
+    private Document[] _inputDocuments
+
+    /** Make the output documents available for the Tests
+     */
+    public List<Document> Documents = []
 
     /**
      * Private constructor.
      */
-    private DataContext(List<Document> inputDocuments) { _inputDocuments = inputDocuments }
-    
-    
-    
+    private DataContext(List<Document> inputDocuments) {
+        _inputDocuments = inputDocuments != null ? inputDocuments : []
+    }
+
+
     // http://docs.groovy-lang.org/docs/groovy-2.4.4/html/groovy-jdk/java/io/InputStream.html
     // * https://community.boomi.com/s/question/0D51W00006As1qC/recursive-function-groovy
 
@@ -30,18 +35,9 @@ class DataContext {
      * @param inputDocuments
      * @return DataContext
      */
-    static DataContext withDocuments(List<Document> inputDocuments) {
-         return new DataContext(inputDocuments)
+    static DataContext create(List<Document> inputDocuments = null) {
+        return new DataContext(inputDocuments)
     }
-
-    /**
-     * Create a new Context with no document.
-     */
-    static DataContext empty() {
-        return new DataContext([])
-    }
-
-
 
 
     /**
@@ -66,7 +62,7 @@ class DataContext {
         return _inputDocuments[docNo]._stream
     }
 
-    
+
     /**
      * After performing your custom logic, you need to convert the data back
      * into an InputStream and store it to the dataContext to pass to the next
@@ -74,8 +70,8 @@ class DataContext {
      * Documents passed to the next step.
      */
     void storeStream(InputStream is, Properties props) {
-        if( _outputDocuments == null) _outputDocuments = []
-        
+        if (Documents == null) Documents = []
+
         /*
             Groovy Goodness: Check for Object Equality
             Groovy overloads the == operator and maps it to the equals() method.
@@ -87,9 +83,8 @@ class DataContext {
             The != operator is also overloaded and maps to the !equals() statement.
             https://blog.mrhaki.com/2009/09/groovy-goodness-check-for-object.html#:~:text=In%20Groovy%20we%20use%20the,overloaded%20and%20maps%20to%20the%20!
          */
-        _outputDocuments.add( new Document( is, props ))
+        Documents.add(new Document(is, props))
     }
-
 
 
     /**
@@ -99,6 +94,6 @@ class DataContext {
      */
     Properties getProperties(int docNo) {
         assert _inputDocuments != null, "DataContext not initialized!"
-        return _inputDocuments[docNo].DocumentProperties
+        return _inputDocuments[docNo]._dynamicDocumentProperties
     }
 }

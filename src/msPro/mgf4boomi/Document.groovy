@@ -4,33 +4,30 @@ import groovy.transform.TypeChecked
 
 
 /**
- * DataContext document helper class.
- * Used to simulate a Document.
+ * Framework internal helper class 
+ *  that represents a document stream with its properties (DDP).
  */
 @TypeChecked
 class Document {
-    final private InputStream _stream
-
-    Document(InputStream stream, Properties props) {
-        _stream = stream
-        DocumentProperties = props
-    }
-    
     public static final String userDefinedPropertyBase = 'document.dynamic.userdefined.'
+    final public InputStream _stream
+    final public Properties _dynamicDocumentProperties
 
-    final public Properties DocumentProperties
-    
-    // Document from text, no properties
-    static Document withoutProperties(String document) {
-        return new Document(new ByteArrayInputStream(document.getBytes("UTF-8")), new Properties())
+    public Document(InputStream stream, Properties props = null) {
+        _stream = stream
+        _dynamicDocumentProperties = props != null ? props : new Properties()
     }
 
-    static Document fromFile(String filePath, Properties props=null) {
+    // Document from text, no properties
+    static Document fromText(String document, Properties props = null) {
+        return new Document(new ByteArrayInputStream(document.getBytes("UTF-8")), props)
+    }
+
+    static Document fromFile(String filePath, Properties props = null) {
         File f = new File(filePath)
         assert f.exists(), "Test data file (${filePath}) does not exist!"
-        //return withoutProperties(f.text)
-        return new Document(new ByteArrayInputStream(f.text.getBytes("UTF-8")), props!=null ? props : new Properties())
+        return fromText(f.getText(), props)
     }
 
-  
+    String toString() { return _stream.getText("UTF-8") }
 }

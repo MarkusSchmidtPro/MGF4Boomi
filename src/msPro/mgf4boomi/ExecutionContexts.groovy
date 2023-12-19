@@ -7,18 +7,21 @@ import groovy.transform.TypeChecked
  * The Boomi-Platform {@link com.boomi.execution.ExecutionUtil} contexts.
  */
 @TypeChecked
-class ExecutionUtilContexts {
+class ExecutionContexts {
     public HashMap<String, String> dynamicProcessProperties
     public HashMap<String, Object> processProperties
     public HashMap<String, String> executionProperties
 
 
-    ExecutionUtilContexts(HashMap<String, String> dynamicProcessProperties = null) {
+    ExecutionContexts(HashMap<String, String> dynamicProcessProperties = null) {
 
         this.dynamicProcessProperties = dynamicProcessProperties != null ? dynamicProcessProperties : new HashMap<String, String>()
         processProperties = new HashMap<String, Object>()
-        executionProperties = new HashMap<String, String>()
-        executionProperties['ACCOUNT_ID'] = 'IntelliJ_IDEA-M42S66'
+        
+        executionProperties = [ 
+                ACCOUNT_ID : 'IntelliJ_IDEA-M42S66',
+        ]
+     /*   executionProperties['ACCOUNT_ID'] = 'IntelliJ_IDEA-M42S66'
         executionProperties['ATOM_ID'] = '0b6e3ab7-9d81-4954-b781-d212195e577c'
         executionProperties['ATOM_NAME'] = 'IntelliJ_IDEA-Atom'
         // not yet provided - need to think about it
@@ -26,7 +29,7 @@ class ExecutionUtilContexts {
         // executionProperties[ 'NODE_ID'] = 'IntelliJ_IDEA-Atom';
         executionProperties['EXECUTION_ID'] = _generateExecutionId()
         executionProperties['PROCESS_ID'] = UUID.randomUUID().toString()
-        executionProperties['PROCESS_NAME'] = 'PROCESS_NAME'
+        executionProperties['PROCESS_NAME'] = 'PROCESS_NAME'*/
     }
 
     /** Create a new and empty ProcessExecutionContext without any property.
@@ -35,7 +38,7 @@ class ExecutionUtilContexts {
      * @see #initAddDynamicProcessProperty(java.lang.String, java.lang.String)
      * @see #initAddProcessProperty(java.lang.String, java.lang.String, java.lang.Object)
      */
-    static ExecutionUtilContexts empty() { return new ExecutionUtilContexts() }
+    static ExecutionContexts 'default'() { return new ExecutionContexts() }
 
 
     /** Add a dynamic process property to the ProcessExecutionContext.
