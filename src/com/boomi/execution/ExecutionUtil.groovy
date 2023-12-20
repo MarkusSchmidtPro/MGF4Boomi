@@ -13,7 +13,7 @@ import java.util.logging.Logger
 @TypeChecked
 class ExecutionUtil {
 
-    private final static Logger _logger = Logger.getLogger(ExecutionUtil.class.name);
+    private final static Logger _logger = Logger.getLogger(ExecutionUtil.class.name)
     private static ExecutionContexts _executionContext
 
 
@@ -23,13 +23,13 @@ class ExecutionUtil {
     static fw_initialize(ExecutionContexts executionContexts ) {
         _executionContext = executionContexts != null ? executionContexts : new ExecutionContexts()
         
-        _logger.setUseParentHandlers(false);
-        def ch = new ConsoleHandler();
+        _logger.setUseParentHandlers(false)
+        def ch = new ConsoleHandler()
         ch.setFormatter( {
             String lev = it.level.toString().padRight(10)    
             return "${lev} ${it.message}\r\n".toString()        
-        } );
-        _logger.addHandler(ch);
+        } )
+        _logger.addHandler(ch)
         /* _logger.setFilter { it.loggerName ==ExecutionUtil.class.name } */
     }         
 

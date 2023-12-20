@@ -20,6 +20,6 @@ class ExecutionManager {
     static ExecutionManager getCurrent() { throw new NotImplementedException() }
 
 
-    int getTopLevelExecutionId(String propertyName) { throw new NotImplementedException() }
+    static int getTopLevelExecutionId(String propertyName) { throw new NotImplementedException() }
 }
 

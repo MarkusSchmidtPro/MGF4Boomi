@@ -10,8 +10,8 @@ import groovy.transform.TypeChecked
 @TypeChecked
 class Document {
     public static final String userDefinedPropertyBase = 'document.dynamic.userdefined.'
-    final public InputStream _stream
-    final public Properties _dynamicDocumentProperties
+    public final InputStream _stream 
+    public final Properties _dynamicDocumentProperties
 
     Document(InputStream stream, Properties props ) {
         assert props!= null

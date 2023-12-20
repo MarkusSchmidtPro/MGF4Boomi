@@ -7,4 +7,4 @@ Find additional documentation how to use the framework and how to install it, on
 
 The framework itself is not documented.
 
-Markus Schmidt (PRO), Decemeber 2023
+Markus Schmidt (PRO), December 2023
