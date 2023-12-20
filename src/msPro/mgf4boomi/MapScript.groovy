@@ -20,8 +20,7 @@ import groovy.transform.TypeChecked
  */
 @TypeChecked
 class MapScript {
-    static final String SCRIPT_BASE_DIR = '../MyScript/src/MapScript/'
-
+    private final static String SCRIPT_BASE_DIR = '../MyScript/src/MapScript/'
     private final File _scriptFile
 
     /** Create a new instance.
@@ -40,13 +39,12 @@ class MapScript {
         if (!_scriptFile.exists()) throw new FileNotFoundException("File '${_scriptFile.getCanonicalPath()}' not found.")
     }
 
-    Map<String, Object> run(ExecutionContexts processExecutionContext, Map inputs) {
-        return run(processExecutionContext, new Binding(inputs))
+    Map<String, Object> run(HashMap inputs, ExecutionContexts executionContexts = null) {
+        return run(new Binding(inputs), executionContexts)
     }
 
-    Map<String, Object> run(ExecutionContexts processExecutionContext, Binding binding) {
-        assert (processExecutionContext != null)
-        ExecutionUtil.fw_initialize(processExecutionContext)
+    Map<String, Object> run(Binding binding, ExecutionContexts executionContexts = null) {
+        ExecutionUtil.fw_initialize(executionContexts)
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(_scriptFile)
         return binding.variables

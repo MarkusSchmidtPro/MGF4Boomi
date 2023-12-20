@@ -13,17 +13,22 @@ class Document {
     final public InputStream _stream
     final public Properties _dynamicDocumentProperties
 
-    public Document(InputStream stream, Map<String, String> props = null) {
+    Document(InputStream stream, Properties props ) {
+        assert props!= null
         _stream = stream
-        _dynamicDocumentProperties = new Properties()
-        if( props == null) return
-        
-        for (def p in props) _dynamicDocumentProperties.setProperty( userDefinedPropertyBase + p.key, p.value)
+        _dynamicDocumentProperties = props
     }
-
+    
     // Document from text, no properties
     static Document fromText(String document, Map<String, String> props = null) {
-        return new Document(new ByteArrayInputStream(document.getBytes("UTF-8")), props)
+
+        final stream = new ByteArrayInputStream(document.getBytes("UTF-8"))
+        final dynamicDocumentProperties = new Properties()
+        
+        props?.each { 
+            dynamicDocumentProperties.setProperty( userDefinedPropertyBase + it.key, it.value) 
+        }   
+        return new Document(stream, dynamicDocumentProperties)
     }
 
     static Document fromFile(String filePath, Map<String, String> props = null) {

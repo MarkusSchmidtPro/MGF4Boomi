@@ -13,24 +13,24 @@ import java.util.logging.Logger
 @TypeChecked
 class ExecutionUtil {
 
-    //private final static Logger _logger = Logger.getLogger("ExecutionUtil")
     private final static Logger _logger = Logger.getLogger(ExecutionUtil.class.name);
+    private static ExecutionContexts _executionContext
 
-    private static ExecutionContexts _executionContext 
 
     /** Framework function to initialize the ExecutionUtil.
       * @param executionContexts
      */
     static fw_initialize(ExecutionContexts executionContexts ) {
-        _executionContext = executionContexts != null ? executionContexts : ExecutionContexts.default()
-        _logger.setUseParentHandlers(false);
+        _executionContext = executionContexts != null ? executionContexts : new ExecutionContexts()
         
+        _logger.setUseParentHandlers(false);
         def ch = new ConsoleHandler();
-        ch.setFormatter( {            return "${it.level} ${it.message}\r\n".toString()        } );
+        ch.setFormatter( {
+            String lev = it.level.toString().padRight(10)    
+            return "${lev} ${it.message}\r\n".toString()        
+        } );
         _logger.addHandler(ch);
-        /*_logger.setFilter {
-            it.loggerName ==ExecutionUtil.class.name 
-        }*/
+        /* _logger.setFilter { it.loggerName ==ExecutionUtil.class.name } */
     }         
 
 
@@ -45,30 +45,26 @@ class ExecutionUtil {
     static Logger getBaseLogger() { return _logger }
 
     static getRuntimeExecutionProperty(String key){
-        assert _executionContext != null, "ExecutionUtil not initialized!"
-        _executionContext.executionProperties.get( key)
+        _executionContext.executionProperties[ key]
     }
 
     /** Get a dynamic process property from the execution context
      */
-    static void setDynamicProcessProperty(String propertyName, String value, Boolean persist) {
-        assert _executionContext != null, "ExecutionUtil not initialized!"
-        _executionContext.dynamicProcessProperties.put(propertyName, value)
+    static void setDynamicProcessProperty(String propertyName, Object value, Boolean persist) {
+        _executionContext.dynamicProcessProperties[propertyName] = value
     }
 
-    static String getDynamicProcessProperty(String propertyName) {
-        assert _executionContext != null, "ExecutionUtil not initialized!"
-        return _executionContext.dynamicProcessProperties.get(propertyName)
+    static Object getDynamicProcessProperty(String propertyName) {
+        return _executionContext.dynamicProcessProperties[ propertyName]
     }
 
-    static String getProcessProperty(String componentId, String propertyKey) {
-        assert _executionContext != null, "ExecutionUtil not initialized!"
-        return _executionContext.processProperties.get(componentId + propertyKey)
+    static Object getProcessProperty(String componentId, String propertyKey) {
+        return _executionContext.processProperties[componentId][propertyKey]
     }
 
-    static void setProcessProperty(String componentId, String propertyKey, String value) {
+    static void setProcessProperty(String componentId, String propertyKey, Object value) {
         assert _executionContext != null, "ExecutionUtil not initialized!"
-        _executionContext.processProperties.put(componentId + propertyKey, value)
+        _executionContext.processProperties[componentId][propertyKey] = value
     }
 }
 
