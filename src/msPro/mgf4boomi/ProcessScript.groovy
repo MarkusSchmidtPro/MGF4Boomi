@@ -7,10 +7,24 @@ import org.codehaus.groovy.control.CompilerConfiguration
 
 @TypeChecked
 class ProcessScript {
-    static final String SCRIPT_BASE_DIR = "../MyScript/src/processScript/"
+    public static final String SCRIPT_BASE_DIR = "src/processScript/"   // Current project root
     private final File _scriptFile
 
-    ProcessScript(String fileName, String baseDir = SCRIPT_BASE_DIR) {
+    /**
+     * Create a new processScript instance for testing.
+     * <h3>Example</h3/> 
+     * <code>final ProcessScript _testScript = 
+     *      new ProcessScript('processProperties/psgProperties_DPP.groovy')`</code>
+     *      
+     * @param fileName A filename relative to @baseDir + @relativeDir.
+     * @param relativeDir a [baseDir] relative directory.
+     * @param baseDir  The script base dir, default: [SCRIPT_BASE_DIR].
+     */
+    ProcessScript(String fileName, String relativeDir = "", String baseDir = SCRIPT_BASE_DIR) {
+        
+        if( !baseDir.endsWith("/")) baseDir += "/"
+        baseDir = (new File(baseDir, relativeDir)).canonicalPath
+        if( !baseDir.endsWith("/")) baseDir += "/"
         _scriptFile = new File(baseDir + fileName)
         if (!_scriptFile.exists()) throw new FileNotFoundException("File '${_scriptFile.getCanonicalPath()}' not found.")
     }
